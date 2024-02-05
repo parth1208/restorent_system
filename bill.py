@@ -5,12 +5,12 @@ print('Welcome To Foodstore')
 time.sleep(1)
 
 
-# def validation_error(error_message):
-#     if len(error_message) != 0:
-#         print(("*")*45+"\n*Error:\n*"+error_message+"\n"+("*")*45)
-#         # print("*********************************************\n*Error:\n*"+error_message+"\n*********************************************")
-#         return 1
-#     return 0
+def validation_error(error_message):
+    if len(error_message) != 0:
+        print(("*")*45+"\n*Error:\n*"+error_message+"\n"+("*")*45)
+        # print("*********************************************\n*Error:\n*"+error_message+"\n*********************************************")
+        return 1
+    return 0
 
 # def validation(dat,blank,inputvalue):
 
@@ -87,19 +87,20 @@ def menu_resize(space,symbol,li_item_list,li_price_list,item_hdr,price_hdr):
     print(symbol +(ls_no_hdr)+(item_hdr) + (" ")*(space - (len(symbol)*2+(len(item_hdr))+(len(price_hdr))+len(ls_no_hdr))) +price_hdr+symbol)
     print(symbol+(" ")*(space - ((len(symbol))*2))+symbol)
     for i in range(0,len(li_item_list)):
-        menu_item = " "+li_item_list[i]
+        menu_item = " "+str(li_item_list[i])
         menu_price = str(li_price_list[i])+" "
         menu_number = " "+str(i+1)+"> "
         print(symbol+menu_number+menu_item+(" ")*(space - (len(symbol)*2 + len(menu_item) + len(menu_price) + len(menu_number)))+menu_price+symbol)
     print(symbol+(" ")*(space - ((len(symbol))*2))+symbol)
     print((symbol)*space)
 
+li_item_lists = ["salsa","samosa","pova","buttermilk"]
+li_price_lists = [100,25,25,20]
+
 def menu():
-    li_item_list = ["salsa","samosa","pova","buttermilk"]
-    li_price_list = [100,25,25,20]
     item_hdr = ' ITEMS'
     price_hdr = 'PRICES '
-    menu_resize(40,'%',li_item_list,li_price_list,item_hdr,price_hdr)
+    menu_resize(40,'%',li_item_lists,li_price_lists,item_hdr,price_hdr)
 
 
 
@@ -107,3 +108,41 @@ def menu():
 show_menu = input("Do You want to open the today Menu? (Y/N):-")
 if show_menu == "Y" or show_menu =='y':
     menu()
+
+li_selcted_item = 0
+ll_item_qty = 0
+ll_error = 0
+condition = True
+ll_selected_menu = []
+ll_selected_menu_qty = []
+while condition == True:
+    li_selcted_item = int(input("Please enter the selected menu item no:-"))
+    if li_selcted_item > len(li_item_lists) or li_selcted_item <= 0:
+        ll_error = validation_error("Item NO " +str(li_selcted_item) + "not in the menu.")
+    else:
+        li_item_qty = int(input("Please enter the qty. of selected item:-"))
+        if li_item_qty <= 0:
+            ll_error = validation_error("Item Qty can't be "+str(li_item_qty)+".")
+
+    if ll_error ==0: 
+        ll_selected_menu.append(li_selcted_item)
+        ll_selected_menu_qty.append(li_item_qty)
+
+    if ll_error != 1:
+        ls_ask = input("Do you want to anything else? (Y/N)")
+        if ls_ask == 'Y' or ls_ask == 'y':
+            condition = True
+        elif ls_ask == 'N' or ls_ask == 'n':
+            condition = False
+    else:
+        condition = False
+
+
+ls_show_order = input("Do you want to see your order? (Y/N)")
+if ls_show_order == "Y" or ls_show_order == "y":
+    item_hdr = ' ITEMS'
+    price_hdr = 'QTY '
+    menu_resize(40,'%',ll_selected_menu,ll_selected_menu_qty,item_hdr,price_hdr)
+else:
+    pass
+
