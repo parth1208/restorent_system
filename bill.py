@@ -125,11 +125,11 @@ while condition == True:
             ll_error = validation_error("Item Qty can't be "+str(li_item_qty)+".")
 
     if ll_error ==0: 
-        ll_selected_menu.append(li_selcted_item)
+        ll_selected_menu.append(li_item_lists[li_selcted_item - 1])
         ll_selected_menu_qty.append(li_item_qty)
 
     if ll_error != 1:
-        ls_ask = input("Do you want to anything else? (Y/N)")
+        ls_ask = input("Do you want to anything else? (Y/N):- ")
         if ls_ask == 'Y' or ls_ask == 'y':
             condition = True
         elif ls_ask == 'N' or ls_ask == 'n':
@@ -138,11 +138,36 @@ while condition == True:
         condition = False
 
 
-ls_show_order = input("Do you want to see your order? (Y/N)")
+ls_show_order = input("Do you want to see your order? (Y/N):- ")
 if ls_show_order == "Y" or ls_show_order == "y":
     item_hdr = ' ITEMS'
     price_hdr = 'QTY '
     menu_resize(40,'%',ll_selected_menu,ll_selected_menu_qty,item_hdr,price_hdr)
-else:
-    pass
+
+ll_error = 0
+condition = True
+while condition == True:
+    ls_delivery_type = int(input("\nThank you for your order. please choose your preferred option: \n1> Dine - in \n2> Takeaway \n3> Delivery \nPlease enter the corresponding number for your choice: "))
+
+    if ls_delivery_type < 1 or ls_delivery_type > 3:
+        ll_error = validation_error("I apologize, but it appears that the number you've entered is not among the provided options. Please select one of the options mentioned above by entering the corresponding number. Thank you!")
+    else:
+        ll_error = 0
+
+    if ll_error == 1 :
+        condition = True
+    else:
+        condition = False
+    
+
+
+print("\nThank you for your order! Please allow us 20 minutes to prepare your delicious meal.\n")
+
+#billing code 
+ls_show_bill = input("Do You want to checkout?:- (Y/N)")
+
+if ls_show_bill == 'Y' or ls_show_bill == 'y':
+    item_hdr = ' ITEMS'
+    price_hdr = 'PRICES '
+    menu_resize(40,'%',ll_selected_menu,ll_selected_menu_qty,item_hdr,price_hdr)
 
