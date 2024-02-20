@@ -1,4 +1,6 @@
+from multipledispatch import dispatch
 import time
+
 
 print('Welcome To Foodstore')
 
@@ -78,9 +80,12 @@ def validation_error(error_message):
 # customer_post_code = input_with_validation('num',True,True,'\nPlease Enter Your postal code:- ')
 # customer_delivery_ins = input_with_validation('str',True,True,'\nPlease Enter Delivery instruction:- ')
 # customer_phone_number = input_with_validation('num',True,True,'\nPlease Enter Phone number:- ')
-
-
+@dispatch(int, str,list,list,str,str)
 def menu_resize(space,symbol,li_item_list,li_price_list,item_hdr,price_hdr):
+    menu_resize(space,symbol,li_item_list,li_price_list,item_hdr,price_hdr,0)
+
+@dispatch(int, str,list,list,str,str,int)
+def menu_resize(space,symbol,li_item_list,li_price_list,item_hdr,price_hdr,total_sum):
     ls_no_hdr = " No."
     print((symbol)*space)
     print(symbol+(" ")*(space - ((len(symbol))*2))+symbol)
@@ -92,6 +97,10 @@ def menu_resize(space,symbol,li_item_list,li_price_list,item_hdr,price_hdr):
         menu_number = " "+str(i+1)+"> "
         print(symbol+menu_number+menu_item+(" ")*(space - (len(symbol)*2 + len(menu_item) + len(menu_price) + len(menu_number)))+menu_price+symbol)
     print(symbol+(" ")*(space - ((len(symbol))*2))+symbol)
+    if total_sum > 0 :
+        print(symbol+(" ")+('-')*(space - ((len(symbol)*2)+(len(" ")*2)))+(" ")+symbol)
+        ls_chekout_label = 'CheckOut'
+        print(symbol+(" ")+ls_chekout_label+(" ")*(space - ((len(symbol)*2)+(len(" ")*2)+(len(ls_chekout_label))+len(str(total_sum))))+str(total_sum)+(" ")+symbol)
     print((symbol)*space)
 
 li_item_lists = ["salsa","samosa","pova","buttermilk"]
@@ -166,8 +175,13 @@ print("\nThank you for your order! Please allow us 20 minutes to prepare your de
 #billing code 
 ls_show_bill = input("Do You want to checkout?:- (Y/N)")
 
+ll_total = 0
 if ls_show_bill == 'Y' or ls_show_bill == 'y':
     item_hdr = ' ITEMS'
     price_hdr = 'PRICES '
-    menu_resize(40,'%',ll_selected_menu,ll_selected_menu_qty,item_hdr,price_hdr)
+    for i in range(0,len(ll_selected_menu_qty)):
+        ll_total += li_price_lists[i]*ll_selected_menu_qty[i]
+        ll_selected_menu_qty[i] = str(li_price_lists[i])+' * '+str(ll_selected_menu_qty[i])+' = '+str(li_price_lists[i]*ll_selected_menu_qty[i])
+        
+    menu_resize(40,'%',ll_selected_menu,ll_selected_menu_qty,item_hdr,price_hdr,ll_total)
 
